@@ -1,0 +1,17 @@
+CODE        PRICE      QTY    TOTAL
+1005        12.99        2    25.98
+4004        45.50        1    45.50
+Opened: Sun Jun 30 15:37:30 EDT 2019
+Closed: Sun Jun 30 15:37:51 EDT 2019
+
+Total Revenue: 71.48 
+
+
+CODE        PRICE      QTY    TOTAL
+1002        12.99        2    25.98
+Opened: Mon Jul 01 10:14:04 EDT 2019
+Closed: Mon Jul 01 10:14:22 EDT 2019
+
+Total Revenue: 25.98 
+
+

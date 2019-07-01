@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
  *
@@ -22,16 +23,21 @@ public class Cashregisterwithobjects {
      * @throws java.io.IOException
      */
     public static void main(String[] args) 
-    throws IOException {
+    throws IOException, InputMismatchException {
         double totalCost = 0;
         int option = -1;
         do {
             System.out.println("1) Open Day\n"
                              + "2) Register Transaction\n"
                              + "3) Do Payment\n"
-                             + "4) Close Day/Exit\n"
-                             + "5) Object Data");
-            option = in.nextInt();
+                             + "4) Close Day/Exit");
+            try {
+              option = in.nextInt();  
+            }
+            catch(InputMismatchException ex) {
+                System.out.println("Only integers from 1 to 4 accepted.");
+                in.nextLine();
+            }
             switch(option) {
                 case 1:
                     openDay();
@@ -39,7 +45,7 @@ public class Cashregisterwithobjects {
                     break;
                 case 2:
                     if(register.getIsOpen()) {
-                        totalCost = registerTransaction();          
+                        totalCost = transactionMenu();          
                     }
                     else {
                         System.out.println("Must open day first.");
@@ -62,41 +68,47 @@ public class Cashregisterwithobjects {
                         option = -1;
                     }
                     break;
-                case 5:
-                    System.out.println("Object Data:");
-                    System.out.println(register.toString());
-                    System.out.println();
-                    System.out.println(register.listTransactions());
-                    break;
-                default:
-                    System.out.println("Default case invoked.");
-                    break;
             }
         } while(option != 4); 
     } //main
     
-    public static double registerTransaction() {
+    public static double registerTransaction(double totalCost) {
+        System.out.println("Enter code: ");
+        String productCode = in.next();
+        System.out.println("Enter price: ");
+        double amount = in.nextDouble();
+        System.out.println("Enter quantity: ");
+        int quantity = in.nextInt();
+
+        totalCost = (amount * quantity) + totalCost;
+        register.setTransactions(new Transaction(productCode, amount, quantity));
+
+        return totalCost;
+    }
+    
+    public static double transactionMenu() {
         int option = -1;
         double totalCost = 0;
         
-        do {
-            System.out.println("Enter code: ");
-            String productCode = in.next();
-            System.out.println("Enter price: ");
-            double amount = in.nextDouble();
-            System.out.println("Enter quantity: ");
-            int quantity = in.nextInt();
-
-            totalCost = (amount * quantity) + totalCost;
-            register.setTransactions(new Transaction(productCode, amount, quantity));
-            
+        do {            
             System.out.println("Transaction Menu\n"
                              + "1) Enter Transaction\n"
                              + "2) Back to main menu");
-            option = in.nextInt();
+            try {
+                option = in.nextInt();
+            }
+            catch(InputMismatchException ex) {
+                System.out.println("Only integers 1 and 2 are accepted.");
+                in.nextLine();
+                option = -1;
+            }  
+            
+            if(option == 1) {
+                totalCost = registerTransaction(totalCost);
+            } 
         } while(option != 2);
         
-        return totalCost;
+        return totalCost;     
     }
     
     public static double doPayment(double totalCost) {
